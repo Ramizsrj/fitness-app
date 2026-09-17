@@ -20,7 +20,7 @@ export function WorkoutForm({ onAdd }) {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (!form.exercise.trim()) {
@@ -32,19 +32,21 @@ export function WorkoutForm({ onAdd }) {
       return
     }
 
-    onAdd({
-      id: crypto.randomUUID(),
-      exercise: form.exercise.trim(),
-      category: form.category,
-      sets: Number(form.sets),
-      reps: Number(form.reps),
-      weight: Number(form.weight),
-      date: form.date,
-      notes: form.notes.trim(),
-    })
-
-    setForm({ ...emptyForm, date: form.date })
-    setError('')
+    try {
+      await onAdd({
+        exercise: form.exercise.trim(),
+        category: form.category,
+        sets: Number(form.sets),
+        reps: Number(form.reps),
+        weight: Number(form.weight),
+        date: form.date,
+        notes: form.notes.trim(),
+      })
+      setForm({ ...emptyForm, date: form.date })
+      setError('')
+    } catch {
+      setError('Could not save the workout. Please try again.')
+    }
   }
 
   return (

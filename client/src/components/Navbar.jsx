@@ -1,4 +1,4 @@
-const TABS = ['Log', 'History', 'Dashboard']
+const TABS = ['Workouts', 'Dashboard']
 
 export function Navbar({ activeTab, onTabChange }) {
   return (

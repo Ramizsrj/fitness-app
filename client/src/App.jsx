@@ -8,7 +8,7 @@ import './App.css'
 
 function App() {
   const [workouts, setWorkouts] = useState([])
-  const [activeTab, setActiveTab] = useState('Log')
+  const [activeTab, setActiveTab] = useState('Workouts')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -39,9 +39,11 @@ function App() {
           <p className="empty-state">Loading workouts...</p>
         ) : (
           <>
-            {activeTab === 'Log' && <WorkoutForm onAdd={addWorkout} />}
-            {activeTab === 'History' && (
-              <WorkoutList workouts={workouts} onDelete={deleteWorkout} />
+            {activeTab === 'Workouts' && (
+              <div className="workout-page">
+                <WorkoutForm onAdd={addWorkout} />
+                <WorkoutList workouts={workouts} onDelete={deleteWorkout} />
+              </div>
             )}
             {activeTab === 'Dashboard' && <Dashboard workouts={workouts} />}
           </>

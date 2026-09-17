@@ -48,9 +48,31 @@
 .app-content {
   flex: 1;
   padding: 2rem;
-  max-width: 720px;
+  max-width: 1080px;
   width: 100%;
   margin: 0 auto;
+}
+
+/* Stacked on mobile; side-by-side once there's room for two columns (desktop) */
+.workout-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .workout-page {
+    flex-direction: row;
+  }
+
+  .workout-page .workout-form {
+    flex: 0 0 360px;
+  }
+
+  .workout-page .workout-list {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 /* Form */

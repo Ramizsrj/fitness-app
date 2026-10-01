@@ -26,12 +26,12 @@ fitness-workout-log/
   client/                 React frontend (Vite)
     src/
       components/         Navbar, WorkoutForm, WorkoutList, Dashboard
-      utils/               date.js (local-date helpers), stats.js (dashboard calculations)
+      utils.js             date helpers + dashboard calculations
       api.js               fetch wrappers for the backend API
       App.jsx              Top-level layout and state
   server/                 Express backend
-    index.js              API routes (GET/POST/DELETE /api/workouts)
-    store.js              Reads/writes data/workouts.json
+    index.js              API routes (GET/POST/DELETE /api/workouts) and the
+                           read/write functions for data/workouts.json
     data/workouts.json    Persisted workout data (created automatically)
 ```
 
@@ -79,4 +79,4 @@ npm run dev
 
 - The React app holds no client-side persistence of its own — all workout data flows through the Express API, demonstrating dynamic client/server data transfer.
 - CSS uses flexbox/grid with wrapping and `auto-fit` columns so the layout reflows naturally from small phone widths up to desktop, rather than relying on fixed breakpoints alone.
-- `client/src/utils/date.js` formats dates using local time components instead of `Date.toISOString()`, avoiding an off-by-one-day bug that timezone conversion would otherwise cause in the dashboard's streak calculation.
+- `client/src/utils.js` formats dates using local time components instead of `Date.toISOString()`, avoiding an off-by-one-day bug that timezone conversion would otherwise cause in the dashboard's streak calculation.

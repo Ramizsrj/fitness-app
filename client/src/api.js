@@ -1,26 +1,35 @@
-const BASE_URL = '/api/workouts'
+// This file has all my functions for talking to the server.
+// I kept them here so the components don't need to know about fetch() themselves.
 
-async function handleResponse(res) {
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error(body.error || `Request failed with status ${res.status}`)
-  }
-  if (res.status === 204) return null
-  return res.json()
+// gets every workout from the server
+export async function fetchWorkouts() {
+  const response = await fetch('/api/workouts')
+  const data = await response.json()
+  return data
 }
 
-export function fetchWorkouts() {
-  return fetch(BASE_URL).then(handleResponse)
-}
-
-export function createWorkout(workout) {
-  return fetch(BASE_URL, {
+// sends a new workout to the server to be saved
+export async function createWorkout(workout) {
+  const response = await fetch('/api/workouts', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(workout),
-  }).then(handleResponse)
+  })
+
+  if (!response.ok) {
+    // something went wrong (e.g. a required field was missing)
+    throw new Error('Could not save the workout')
+  }
+
+  const data = await response.json()
+  return data
 }
 
-export function deleteWorkout(id) {
-  return fetch(`${BASE_URL}/${id}`, { method: 'DELETE' }).then(handleResponse)
+// tells the server to delete one workout, using its id
+export async function deleteWorkout(id) {
+  await fetch('/api/workouts/' + id, {
+    method: 'DELETE',
+  })
 }

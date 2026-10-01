@@ -1,13 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 export function WorkoutList({ workouts, onDelete }) {
   const [query, setQuery] = useState('')
 
-  const filtered = useMemo(() => {
-    const sorted = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date))
-    if (!query.trim()) return sorted
-    return sorted.filter((w) => w.exercise.toLowerCase().includes(query.trim().toLowerCase()))
-  }, [workouts, query])
+  // newest workout first
+  const sortedWorkouts = [...workouts].sort(function (a, b) {
+    return new Date(b.date) - new Date(a.date)
+  })
+
+  // if there's something typed in the search box, only keep matching exercises
+  let visibleWorkouts = sortedWorkouts
+  if (query.trim() !== '') {
+    visibleWorkouts = sortedWorkouts.filter(function (workout) {
+      return workout.exercise.toLowerCase().includes(query.trim().toLowerCase())
+    })
+  }
 
   return (
     <div className="workout-list">
@@ -21,22 +28,24 @@ export function WorkoutList({ workouts, onDelete }) {
         />
       </div>
 
-      {filtered.length === 0 ? (
+      {visibleWorkouts.length === 0 ? (
         <p className="empty-state">No workouts logged yet. Add one above to get started.</p>
       ) : (
         <ul>
-          {filtered.map((w) => (
-            <li key={w.id} className="workout-item">
+          {visibleWorkouts.map((workout) => (
+            <li key={workout.id} className="workout-item">
               <div className="workout-item-main">
-                <span className="workout-exercise">{w.exercise}</span>
-                <span className="workout-category">{w.category}</span>
+                <span className="workout-exercise">{workout.exercise}</span>
+                <span className="workout-category">{workout.category}</span>
               </div>
               <div className="workout-item-details">
-                <span>{w.sets} sets × {w.reps} reps @ {w.weight} kg</span>
-                <span>{w.date}</span>
+                <span>
+                  {workout.sets} sets × {workout.reps} reps @ {workout.weight} kg
+                </span>
+                <span>{workout.date}</span>
               </div>
-              {w.notes && <p className="workout-notes">{w.notes}</p>}
-              <button className="delete-btn" onClick={() => onDelete(w.id)}>
+              {workout.notes && <p className="workout-notes">{workout.notes}</p>}
+              <button className="delete-btn" onClick={() => onDelete(workout.id)}>
                 Delete
               </button>
             </li>

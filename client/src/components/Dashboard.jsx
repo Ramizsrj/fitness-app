@@ -4,14 +4,16 @@ import {
   totalVolume,
   totalWorkouts,
   weeklyVolume,
-} from '../utils/stats'
+} from '../utils'
 
+// all the maths for these numbers lives in utils.js, so this component
+// just has to call the functions and show the results on screen
 export function Dashboard({ workouts }) {
   const stats = [
     { label: 'Total Workouts', value: totalWorkouts(workouts) },
-    { label: 'Total Volume', value: `${totalVolume(workouts).toLocaleString()} kg` },
-    { label: 'This Week', value: `${weeklyVolume(workouts).toLocaleString()} kg` },
-    { label: 'Current Streak', value: `${currentStreak(workouts)} day(s)` },
+    { label: 'Total Volume', value: totalVolume(workouts).toLocaleString() + ' kg' },
+    { label: 'This Week', value: weeklyVolume(workouts).toLocaleString() + ' kg' },
+    { label: 'Current Streak', value: currentStreak(workouts) + ' day(s)' },
     { label: 'Top Exercise', value: mostFrequentExercise(workouts) || 'N/A' },
   ]
 

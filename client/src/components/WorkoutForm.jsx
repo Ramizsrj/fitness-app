@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { today } from '../utils/date'
+import { today } from '../utils'
 
+// this is the starting (empty) state for the form
 const emptyForm = {
   exercise: '',
   category: 'Strength',
@@ -15,12 +16,19 @@ export function WorkoutForm({ onAdd }) {
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState('')
 
+  // this runs every time the user types in any input box
+  // name comes from the input's "name" attribute, so one function can handle every field
   function handleChange(e) {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    const name = e.target.name
+    const value = e.target.value
+
+    const updatedForm = { ...form }
+    updatedForm[name] = value
+    setForm(updatedForm)
   }
 
   async function handleSubmit(e) {
+    // stop the browser from refreshing the page (the normal thing a form does)
     e.preventDefault()
 
     if (!form.exercise.trim()) {
@@ -42,9 +50,11 @@ export function WorkoutForm({ onAdd }) {
         date: form.date,
         notes: form.notes.trim(),
       })
+
+      // clear the form again, but keep the date the user picked
       setForm({ ...emptyForm, date: form.date })
       setError('')
-    } catch {
+    } catch (err) {
       setError('Could not save the workout. Please try again.')
     }
   }
